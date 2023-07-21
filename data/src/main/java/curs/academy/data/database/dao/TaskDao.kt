@@ -1,10 +1,11 @@
-package com.example.data.database.dao
+package curs.academy.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import curs.academy.data.models.TaskModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
@@ -23,4 +24,7 @@ interface TaskDao {
 
     @Query("UPDATE task_table SET taskCompleted = :newStateTaskCompleted WHERE id = :id")
     fun updateStateCompletedTask(newStateTaskCompleted : Boolean, id : Int)
+
+    @Query("SELECT * FROM task_table")
+    fun getAllTaskFlow() : Flow<List<TaskModel>>
 }

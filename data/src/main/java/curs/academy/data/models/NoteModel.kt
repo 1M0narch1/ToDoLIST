@@ -13,6 +13,12 @@ data class NoteModel (
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0
 ){
+    fun toNote() :Note = Note(
+        text,
+        dateOfCreation,
+        dateOfFutureExecution
+        )
+
     companion object{
         fun map(note : Note): NoteModel = NoteModel(note.text, note.dateOfCreation, note.dateOfFutureExecution)
     }

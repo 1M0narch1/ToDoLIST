@@ -1,10 +1,11 @@
-package com.example.data.database.dao
+package curs.academy.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import curs.academy.data.models.NoteModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NoteDao {
@@ -22,4 +23,7 @@ interface NoteDao {
 
     @Query("DELETE FROM note_table")
     fun deleteAllNote()
+
+    @Query("SELECT * FROM note_table")
+    fun getAllNoteFlow() : Flow<List<NoteModel>>
 }

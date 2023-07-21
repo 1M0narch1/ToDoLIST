@@ -15,6 +15,14 @@ data class TaskModel (
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0
 ){
+    fun toTask():Task = Task(
+        title,
+        text,
+        dateOfCreation,
+        dateOfFutureExecution,
+        taskCompleted
+    )
+
     companion object{
         fun map(task: Task): TaskModel = TaskModel(task.title, task.text, task.dateOfCreation,
             task.dateOfFutureExecution, task.taskCompleted)
