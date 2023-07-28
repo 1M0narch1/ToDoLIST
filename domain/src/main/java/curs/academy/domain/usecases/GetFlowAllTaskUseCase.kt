@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 class GetFlowAllTaskUseCase(private val taskRepository: TaskRepository) {
 
-    suspend fun execute() : Flow<List<Task>> {
+    fun execute() : Flow<List<Task>> {
         return taskRepository.getAllTaskFlow()
     }
 
