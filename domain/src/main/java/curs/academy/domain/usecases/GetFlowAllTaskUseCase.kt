@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 class GetFlowAllTaskUseCase(private val taskRepository: TaskRepository) {
 
-    fun execute() : Flow<List<Task>> {
-        return taskRepository.getAllTaskFlow()
+    fun execute(userId : Int) : Flow<List<Task>> {
+        return taskRepository.getAllTaskFlow(userId)
     }
 
 }

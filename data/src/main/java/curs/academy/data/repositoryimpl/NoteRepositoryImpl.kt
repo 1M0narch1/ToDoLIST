@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-class NoteRepositoryImpl(val noteDao: NoteDao) : NoteRepository {
+class NoteRepositoryImpl(private val noteDao: NoteDao) : NoteRepository {
 
     private val job = SupervisorJob()
     private val noteScope = CoroutineScope(job+Dispatchers.IO)
@@ -24,9 +24,9 @@ class NoteRepositoryImpl(val noteDao: NoteDao) : NoteRepository {
         }
     }
 
-    override suspend fun getAllNote(): List<Note> {
+    override suspend fun getAllNote(userId : Int): List<Note> {
         return noteScope.async {
-            noteDao.getAllNote().map { it.toNote() }
+            noteDao.getAllNote(userId).map { it.toNote() }
         }.await()
     }
 
@@ -42,14 +42,14 @@ class NoteRepositoryImpl(val noteDao: NoteDao) : NoteRepository {
         }
     }
 
-    override suspend fun deleteAllNote() {
+    override suspend fun deleteAllNote(userId : Int) {
         noteScope.launch {
-            noteDao.deleteAllNote()
+            noteDao.deleteAllNote(userId)
         }
     }
 
-    override fun getAllNoteFlow(): Flow<List<Note>> {
-        return noteDao.getAllNoteFlow().flatMapConcat { list ->
+    override fun getAllNoteFlow(userId : Int): Flow<List<Note>> {
+        return noteDao.getAllNoteFlow(userId).flatMapConcat { list ->
             flowOf(list.map { it.toNote() })
         }
     }

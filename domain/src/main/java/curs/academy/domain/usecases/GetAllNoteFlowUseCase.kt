@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 class GetAllNoteFlowUseCase(private val noteRepository: NoteRepository) {
 
-    fun execute() : Flow<List<Note>> {
-        return noteRepository.getAllNoteFlow()
+    fun execute(userId : Int) : Flow<List<Note>> {
+        return noteRepository.getAllNoteFlow(userId)
     }
 
 }

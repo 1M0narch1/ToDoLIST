@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-class TaskRepositoryImpl(val taskDao: TaskDao) : TaskRepository {
+class TaskRepositoryImpl(private val taskDao: TaskDao) : TaskRepository {
 
     private val job = SupervisorJob()
     private val taskScope = CoroutineScope(job+Dispatchers.IO)
@@ -25,9 +25,9 @@ class TaskRepositoryImpl(val taskDao: TaskDao) : TaskRepository {
         }
     }
 
-    override suspend fun getAllTask(): List<Task> {
+    override suspend fun getAllTask(userId : Int): List<Task> {
         return taskScope.async {
-            taskDao.getAllTask().map { it.toTask() }
+            taskDao.getAllTask(userId).map { it.toTask() }
         }.await()
     }
 
@@ -49,8 +49,8 @@ class TaskRepositoryImpl(val taskDao: TaskDao) : TaskRepository {
         }
     }
 
-    override fun getAllTaskFlow(): Flow<List<Task>> {
-        return taskDao.getAllTaskFlow().flatMapConcat { list ->
+    override fun getAllTaskFlow(userId : Int): Flow<List<Task>> {
+        return taskDao.getAllTaskFlow(userId).flatMapConcat { list ->
             flowOf(list.map { it.toTask() })
         }
     }

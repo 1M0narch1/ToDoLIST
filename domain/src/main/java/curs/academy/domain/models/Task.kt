@@ -6,5 +6,6 @@ data class Task (
     val dateOfCreation : Long,
     val dateOfFutureExecution : Long,
     val taskCompleted : Boolean,
+    val userId : Int,
     val id : Int = 0
 )

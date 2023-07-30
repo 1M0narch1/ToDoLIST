@@ -12,6 +12,7 @@ data class TaskModel (
     val dateOfCreation : Long,
     val dateOfFutureExecution : Long,
     val taskCompleted : Boolean,
+    val userId : Int,
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0
 ){
@@ -20,11 +21,12 @@ data class TaskModel (
         text,
         dateOfCreation,
         dateOfFutureExecution,
-        taskCompleted
+        taskCompleted,
+        userId
     )
 
     companion object{
         fun map(task: Task): TaskModel = TaskModel(task.title, task.text, task.dateOfCreation,
-            task.dateOfFutureExecution, task.taskCompleted)
+            task.dateOfFutureExecution, task.taskCompleted, task.userId)
     }
 }

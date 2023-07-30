@@ -5,7 +5,7 @@ import curs.academy.domain.repository.NoteRepository
 
 class GetAllNoteUseCase(private val noteRepository: NoteRepository) {
 
-    suspend fun execute() : List<Note>{
-        return noteRepository.getAllNote()
+    suspend fun execute(userId : Int) : List<Note>{
+        return noteRepository.getAllNote(userId)
     }
 }

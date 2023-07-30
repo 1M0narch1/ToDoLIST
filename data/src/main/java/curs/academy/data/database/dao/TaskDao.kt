@@ -13,8 +13,8 @@ interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertTask(task: TaskModel)
 
-    @Query("SELECT * FROM task_table")
-    fun getAllTask() : List<TaskModel>
+    @Query("SELECT * FROM task_table WHERE userId = :userId")
+    fun getAllTask(userId : Int) : List<TaskModel>
 
     @Query("DELETE FROM task_table WHERE id = :id")
     fun deleteTask(id : Int)
@@ -25,6 +25,6 @@ interface TaskDao {
     @Query("UPDATE task_table SET taskCompleted = :newStateTaskCompleted WHERE id = :id")
     fun updateStateCompletedTask(newStateTaskCompleted : Boolean, id : Int)
 
-    @Query("SELECT * FROM task_table")
-    fun getAllTaskFlow() : Flow<List<TaskModel>>
+    @Query("SELECT * FROM task_table WHERE userId = userId")
+    fun getAllTaskFlow(userId : Int) : Flow<List<TaskModel>>
 }
