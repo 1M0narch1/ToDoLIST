@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import curs.academy.data.database.dao.NoteDao
 import curs.academy.data.database.dao.TaskDao
+import curs.academy.data.database.dao.UserDao
 import curs.academy.data.models.NoteModel
 import curs.academy.data.models.TaskModel
 
@@ -17,6 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getNoteDao() : NoteDao
     abstract fun getTaskDao() : TaskDao
+    abstract fun getUserDao() : UserDao
 
     companion object{
         const val DATABASE_VERSION = 1
