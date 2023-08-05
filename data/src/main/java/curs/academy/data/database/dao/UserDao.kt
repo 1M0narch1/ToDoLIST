@@ -20,4 +20,7 @@ interface UserDao {
 
     @Query("UPDATE user_table SET password = :newPassword WHERE id = :id")
     fun updatePassword(newPassword : String, id : Int)
+
+    @Query("SELECT userId FROM user_table WHERE login = :login AND password = :password")
+    fun getUserId(login : String, password: String) : Int
 }

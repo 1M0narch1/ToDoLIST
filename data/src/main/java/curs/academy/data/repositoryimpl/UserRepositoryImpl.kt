@@ -7,6 +7,7 @@ import curs.academy.domain.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class UserRepositoryImpl(val userDao: UserDao) : UserRepository {
@@ -36,5 +37,11 @@ class UserRepositoryImpl(val userDao: UserDao) : UserRepository {
         userScope.launch{
             userDao.updatePassword(newPassword, id)
         }
+    }
+
+    override suspend fun getUserId(login: String, password: String): Int {
+        return userScope.async {
+           userDao.getUserId(login, password)
+        }.await()
     }
 }

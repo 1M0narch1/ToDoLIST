@@ -25,6 +25,6 @@ interface TaskDao {
     @Query("UPDATE task_table SET taskCompleted = :newStateTaskCompleted WHERE id = :id")
     fun updateStateCompletedTask(newStateTaskCompleted : Boolean, id : Int)
 
-    @Query("SELECT * FROM task_table WHERE userId = userId")
+    @Query("SELECT * FROM task_table WHERE userId = :userId")
     fun getAllTaskFlow(userId : Int) : Flow<List<TaskModel>>
 }

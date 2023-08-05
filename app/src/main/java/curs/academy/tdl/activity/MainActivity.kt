@@ -23,46 +23,29 @@ import curs.academy.tdl.viewmodel.NoteViewModel
 import curs.academy.tdl.viewmodel.NoteViewModelFactory
 import curs.academy.tdl.viewmodel.TaskViewModel
 import curs.academy.tdl.viewmodel.TaskViewModelFactory
+import curs.academy.tdl.viewmodel.UserViewModel
+import curs.academy.tdl.viewmodel.UserViewModelFactory
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var noteViewModelFactory: NoteViewModelFactory
+    @Inject
+    lateinit var taskViewModelFactory: TaskViewModelFactory
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        ToDoListApp.INSTANCE.appComponent.inject(this)
 
-        val vm = NoteViewModel(InsertNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            UpdateNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            GetAllNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            GetAllNoteFlowUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            DeleteNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            DeleteAllNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())))
-
-        val vm1 = TaskViewModel(InsertTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            UpdateStateCompletedTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            UpdateTaskTextUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            GetAllTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            GetFlowAllTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            DeleteTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())))
-
-
-        val vm2 =ViewModelProvider(this, NoteViewModelFactory(InsertNoteUseCase(
-            NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            UpdateNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            GetAllNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            GetAllNoteFlowUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            DeleteNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao())),
-            DeleteAllNoteUseCase(NoteRepositoryImpl(ToDoListApp.INSTANCE.database.getNoteDao()))))
+        val viewModelUser = ViewModelProvider(this, userViewModelFactory)
+            .get(UserViewModel::class.java)
+        val viewModelTask = ViewModelProvider(this, taskViewModelFactory)
+            .get(TaskViewModel::class.java)
+        val viewModelNote = ViewModelProvider(this, noteViewModelFactory)
             .get(NoteViewModel::class.java)
-
-        val vm3 =ViewModelProvider(this, TaskViewModelFactory(
-            InsertTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            UpdateStateCompletedTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            UpdateTaskTextUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            GetAllTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            GetFlowAllTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao())),
-            DeleteTaskUseCase(TaskRepositoryImpl(ToDoListApp.INSTANCE.database.getTaskDao()))
-        )).get(TaskViewModel::class.java)
-
-
     }
 
 }

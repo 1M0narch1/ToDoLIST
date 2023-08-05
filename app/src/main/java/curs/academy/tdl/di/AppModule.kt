@@ -1,6 +1,7 @@
 package curs.academy.tdl.di
 
-import curs.academy.domain.repository.TaskRepository
+
+import androidx.lifecycle.ViewModelProvider
 import curs.academy.domain.usecases.DeleteAllNoteUseCase
 import curs.academy.domain.usecases.DeleteNoteUseCase
 import curs.academy.domain.usecases.DeleteTaskUseCase
@@ -9,6 +10,7 @@ import curs.academy.domain.usecases.GetAllNoteFlowUseCase
 import curs.academy.domain.usecases.GetAllNoteUseCase
 import curs.academy.domain.usecases.GetAllTaskUseCase
 import curs.academy.domain.usecases.GetFlowAllTaskUseCase
+import curs.academy.domain.usecases.GetUserIdUseCase
 import curs.academy.domain.usecases.InsertNoteUseCase
 import curs.academy.domain.usecases.InsertTaskUseCase
 import curs.academy.domain.usecases.InsertUserUseCase
@@ -19,6 +21,7 @@ import curs.academy.domain.usecases.UpdateStateCompletedTaskUseCase
 import curs.academy.domain.usecases.UpdateTaskTextUseCase
 import curs.academy.tdl.viewmodel.NoteViewModelFactory
 import curs.academy.tdl.viewmodel.TaskViewModelFactory
+import curs.academy.tdl.viewmodel.UserViewModel
 import curs.academy.tdl.viewmodel.UserViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -62,11 +65,13 @@ class AppModule {
     fun provideUserViewModelFactory(insertUserUseCase: InsertUserUseCase,
                                     deleteUserUseCase: DeleteUserUseCase,
                                     updateLoginUseCase: UpdateLoginUseCase,
-                                    updatePasswordUseCase: UpdatePasswordUseCase) : UserViewModelFactory{
+                                    updatePasswordUseCase: UpdatePasswordUseCase,
+                                    getUserIdUseCase: GetUserIdUseCase) : UserViewModelFactory{
         return UserViewModelFactory(insertUserUseCase,
                                     deleteUserUseCase,
                                     updateLoginUseCase,
-                                    updatePasswordUseCase)
+                                    updatePasswordUseCase,
+                                    getUserIdUseCase)
     }
 
 }

@@ -13,8 +13,7 @@ class ToDoListApp : Application() {
     override fun onCreate() {
         super.onCreate()
         INSTANCE = this
-
-        appComponent = DaggerAppComponent.create()
+        appComponent = DaggerAppComponent.builder().build()
     }
 
     companion object{

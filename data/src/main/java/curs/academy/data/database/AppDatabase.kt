@@ -9,9 +9,10 @@ import curs.academy.data.database.dao.TaskDao
 import curs.academy.data.database.dao.UserDao
 import curs.academy.data.models.NoteModel
 import curs.academy.data.models.TaskModel
+import curs.academy.data.models.UserModel
 
 @Database(
-    entities = [TaskModel::class, NoteModel::class],
+    entities = [TaskModel::class, NoteModel::class, UserModel::class],
     version = AppDatabase.DATABASE_VERSION
 )
 abstract class AppDatabase : RoomDatabase() {

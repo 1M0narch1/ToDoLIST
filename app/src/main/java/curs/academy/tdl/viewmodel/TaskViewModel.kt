@@ -14,24 +14,24 @@ import curs.academy.domain.usecases.UpdateStateCompletedTaskUseCase
 import curs.academy.domain.usecases.UpdateTaskTextUseCase
 import curs.academy.tdl.model.ValidationState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TaskViewModel(private val insertTaskUseCase : InsertTaskUseCase,
                     private val updateStateCompletedTaskUseCase: UpdateStateCompletedTaskUseCase,
                     private val updateTaskTextUseCase: UpdateTaskTextUseCase,
                     private val getAllTaskUseCase: GetAllTaskUseCase,
                     private val getFlowAllTaskUseCase: GetFlowAllTaskUseCase,
-                    private val deleteTaskUseCase: DeleteTaskUseCase
+                    private val deleteTaskUseCase: DeleteTaskUseCase,
 ): ViewModel() {
 
     private val  _state : MutableLiveData<ValidationState> = MutableLiveData(ValidationState.DataValid)
     val state : LiveData<ValidationState> = _state
 
-    val notes : StateFlow<List<Task>> = getFlowAllTaskUseCase.execute().stateIn(
+    fun getTasksFlow(currentUserId: Int) : StateFlow<List<Task>> = getFlowAllTaskUseCase.execute(currentUserId).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = listOf()
@@ -41,10 +41,17 @@ class TaskViewModel(private val insertTaskUseCase : InsertTaskUseCase,
                    text : String,
                    dateOfCreation : Long,
                    dateOfFutureExecution : Long,
-                   taskCompleted:Boolean):Boolean{
+                   taskCompleted:Boolean,
+                   currentUserId: Int):Boolean{
         if(isDataValid(title, text, dateOfCreation, dateOfFutureExecution, taskCompleted)){
             viewModelScope.launch(Dispatchers.IO) {
-                insertTaskUseCase.execute(Task(title, text, dateOfCreation, dateOfFutureExecution, taskCompleted))
+                insertTaskUseCase.execute(Task(
+                    title,
+                    text,
+                    dateOfCreation,
+                    dateOfFutureExecution,
+                    taskCompleted,
+                    currentUserId))
             }
             return true
         }
@@ -67,10 +74,10 @@ class TaskViewModel(private val insertTaskUseCase : InsertTaskUseCase,
         return false
     }
 
-    suspend fun getAllTask() : List<Task>{
-        return viewModelScope.async(Dispatchers.IO) {
-            getAllTaskUseCase.execute()
-        }.await()
+    suspend fun getAllTask(currentUserId: Int) : List<Task>{
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+            getAllTaskUseCase.execute(currentUserId)
+        }
     }
 
     fun deleteTask(id : Int){
@@ -93,7 +100,8 @@ class TaskViewModel(private val insertTaskUseCase : InsertTaskUseCase,
                 text,
                 dateOfCreation,
                 dateOfFutureExecution,
-                taskCompleted)
+                taskCompleted,
+                0)
             _state.value = ValidationState.DataValid
             true
         }catch (e :Exception){
@@ -109,7 +117,7 @@ class TaskViewModelFactory(private val insertTaskUseCase : InsertTaskUseCase,
                            private val updateTaskTextUseCase: UpdateTaskTextUseCase,
                            private val getAllTaskUseCase: GetAllTaskUseCase,
                            private val getFlowAllTaskUseCase: GetFlowAllTaskUseCase,
-                           private val deleteTaskUseCase: DeleteTaskUseCase
+                           private val deleteTaskUseCase: DeleteTaskUseCase,
 ): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(TaskViewModel::class.java)){

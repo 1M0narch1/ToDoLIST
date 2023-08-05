@@ -11,6 +11,7 @@ import curs.academy.domain.usecases.GetAllNoteFlowUseCase
 import curs.academy.domain.usecases.GetAllNoteUseCase
 import curs.academy.domain.usecases.GetAllTaskUseCase
 import curs.academy.domain.usecases.GetFlowAllTaskUseCase
+import curs.academy.domain.usecases.GetUserIdUseCase
 import curs.academy.domain.usecases.InsertNoteUseCase
 import curs.academy.domain.usecases.InsertTaskUseCase
 import curs.academy.domain.usecases.InsertUserUseCase
@@ -109,4 +110,10 @@ class DomainModel {
     fun provideUpdatePasswordUseCase(repository: UserRepository) : UpdatePasswordUseCase{
         return UpdatePasswordUseCase(repository)
     }
+
+    @Provides
+    fun provideGetUserIdUseCase(repository: UserRepository) : GetUserIdUseCase{
+        return GetUserIdUseCase(repository)
+    }
+
 }

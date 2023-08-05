@@ -5,42 +5,42 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import curs.academy.domain.models.Note
 import curs.academy.domain.usecases.DeleteAllNoteUseCase
 import curs.academy.domain.usecases.DeleteNoteUseCase
 import curs.academy.domain.usecases.GetAllNoteFlowUseCase
 import curs.academy.domain.usecases.GetAllNoteUseCase
 import curs.academy.domain.usecases.InsertNoteUseCase
 import curs.academy.domain.usecases.UpdateNoteUseCase
+import curs.academy.tdl.model.ValidationState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import curs.academy.domain.models.Note
-import curs.academy.tdl.model.ValidationState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
                     private val updateNoteUseCase: UpdateNoteUseCase,
                     private val getAllNoteUseCase: GetAllNoteUseCase,
                     private val getAllNoteFlowUseCase: GetAllNoteFlowUseCase,
                     private val deleteNoteUseCase: DeleteNoteUseCase,
-                    private val deleteAllNoteUseCase: DeleteAllNoteUseCase
+                    private val deleteAllNoteUseCase: DeleteAllNoteUseCase,
     ) : ViewModel() {
 
     private val  _state : MutableLiveData<ValidationState> = MutableLiveData(ValidationState.DataValid)
     val state : LiveData<ValidationState> = _state
 
-    val notes : StateFlow<List<Note>> = getAllNoteFlowUseCase.execute().stateIn(
+    fun getNotesFlow(currentUserId: Int) : StateFlow<List<Note>> = getAllNoteFlowUseCase.execute(currentUserId).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = listOf()
     )
 
-    fun insertNote(text : String, dateOfCreation : Long, dateOfFutureExecution : Long):Boolean{
+    fun insertNote(text : String, dateOfCreation : Long, dateOfFutureExecution : Long, currentUserId: Int):Boolean{
         if(isDataValid(text, dateOfCreation, dateOfFutureExecution)){
             viewModelScope.launch(Dispatchers.IO) {
-                insertNoteUseCase.execute(Note(text, dateOfCreation, dateOfFutureExecution))
+                insertNoteUseCase.execute(Note(text, dateOfCreation, dateOfFutureExecution, currentUserId))
             }
             return true
         }
@@ -57,10 +57,10 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
         return false
     }
 
-    suspend fun getAllNote() : List<Note>{
-        return viewModelScope.async(Dispatchers.IO) {
-            getAllNoteUseCase.execute()
-        }.await()
+    suspend fun getAllNote(currentUserId: Int) : List<Note>{
+        return withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
+            getAllNoteUseCase.execute(currentUserId)
+        }
     }
 
     fun deleteNote(id : Int){
@@ -69,9 +69,9 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
         }
     }
 
-    fun deleteAllNote(){
+    fun deleteAllNote(currentUserId: Int){
         viewModelScope.launch(Dispatchers.IO) {
-            deleteAllNoteUseCase.execute()
+            deleteAllNoteUseCase.execute(currentUserId)
         }
     }
 
@@ -83,7 +83,8 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
         return try {
             Note(text,
                 dateOfCreation,
-                dateOfFutureExecution)
+                dateOfFutureExecution,
+                0)
             _state.value = ValidationState.DataValid
              true
         }catch (e :Exception){
@@ -100,7 +101,7 @@ class NoteViewModelFactory(private val insertNoteUseCase : InsertNoteUseCase,
                            private val getAllNoteUseCase: GetAllNoteUseCase,
                            private val getAllNoteFlowUseCase: GetAllNoteFlowUseCase,
                            private val deleteNoteUseCase: DeleteNoteUseCase,
-                           private val deleteAllNoteUseCase: DeleteAllNoteUseCase
+                           private val deleteAllNoteUseCase: DeleteAllNoteUseCase,
                            ): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(NoteViewModel::class.java)){
