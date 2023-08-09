@@ -1,4 +1,4 @@
-package curs.academy.domain.usecases
+package curs.academy.domain.usecases.Note
 
 import curs.academy.domain.repository.NoteRepository
 

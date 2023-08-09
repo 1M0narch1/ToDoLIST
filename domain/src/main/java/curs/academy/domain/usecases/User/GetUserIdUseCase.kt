@@ -1,4 +1,4 @@
-package curs.academy.domain.usecases
+package curs.academy.domain.usecases.User
 
 import curs.academy.domain.models.User
 import curs.academy.domain.repository.UserRepository

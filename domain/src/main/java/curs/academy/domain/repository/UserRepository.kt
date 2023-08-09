@@ -1,7 +1,6 @@
 package curs.academy.domain.repository
 
 import curs.academy.domain.models.User
-import curs.academy.domain.usecases.UpdatePasswordUseCase
 
 interface UserRepository {
 

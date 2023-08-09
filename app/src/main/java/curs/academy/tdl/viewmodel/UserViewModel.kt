@@ -4,12 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import curs.academy.domain.models.User
-import curs.academy.domain.usecases.DeleteUserUseCase
-import curs.academy.domain.usecases.GetUserIdUseCase
-import curs.academy.domain.usecases.InsertUserUseCase
-import curs.academy.domain.usecases.UpdateLoginUseCase
-import curs.academy.domain.usecases.UpdatePasswordUseCase
-import kotlinx.coroutines.async
+import curs.academy.domain.usecases.User.DeleteUserUseCase
+import curs.academy.domain.usecases.User.GetUserIdUseCase
+import curs.academy.domain.usecases.User.InsertUserUseCase
+import curs.academy.domain.usecases.User.UpdateLoginUseCase
+import curs.academy.domain.usecases.User.UpdatePasswordUseCase
 import kotlinx.coroutines.launch
 
 class UserViewModel(

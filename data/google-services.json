@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "874879205240",
+    "project_id": "todolist-13c07",
+    "storage_bucket": "todolist-13c07.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874879205240:android:8fbdbc18a399d5b900528d",
+        "android_client_info": {
+          "package_name": "curs.academy.data"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "874879205240-qk0h63t10tg5u5d6vc7joag3pnsm7nmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6TuVEE-Amv2CASNvl0_gzIYgcoB3HeOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "874879205240-qk0h63t10tg5u5d6vc7joag3pnsm7nmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
