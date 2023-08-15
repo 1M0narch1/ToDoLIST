@@ -6,7 +6,7 @@ import curs.academy.domain.models.User
 
 @Entity(tableName = "user_table")
 data class UserModel (
-    val userId : Int,
+    val userId : String,
     val login : String,
     val password : String,
     @PrimaryKey(autoGenerate = true)
@@ -15,7 +15,8 @@ data class UserModel (
     fun toUser():User = User(
         userId,
         login,
-        password
+        password,
+        id
     )
 
     companion object{

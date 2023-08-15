@@ -4,11 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import curs.academy.domain.models.User
-import curs.academy.domain.usecases.User.DeleteUserUseCase
-import curs.academy.domain.usecases.User.GetUserIdUseCase
-import curs.academy.domain.usecases.User.InsertUserUseCase
-import curs.academy.domain.usecases.User.UpdateLoginUseCase
-import curs.academy.domain.usecases.User.UpdatePasswordUseCase
+import curs.academy.domain.usecases.user.DeleteUserUseCase
+import curs.academy.domain.usecases.user.GetAllUserUseCase
+import curs.academy.domain.usecases.user.GetUserByIdUseCase
+import curs.academy.domain.usecases.user.GetUserIdUseCase
+import curs.academy.domain.usecases.user.InsertUserUseCase
+import curs.academy.domain.usecases.user.UpdateLoginUseCase
+import curs.academy.domain.usecases.user.UpdatePasswordUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class UserViewModel(
@@ -16,22 +20,36 @@ class UserViewModel(
     private val deleteUserUseCase: DeleteUserUseCase,
     private val updateLoginUseCase: UpdateLoginUseCase,
     private val updatePasswordUseCase: UpdatePasswordUseCase,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val getUserIdUseCase: GetUserIdUseCase,
+    private val getUserByIdUseCase: GetUserByIdUseCase,
+    private val getAllUserUseCase: GetAllUserUseCase
 ) : ViewModel(){
 
-    private var _userId = -1
-    val currentUserID = _userId
+    var currentUserID = ""
 
-    fun setUserId(login: String, password: String) {
-        viewModelScope.launch{
-            _userId = getUserIdUseCase.execute(login,password)
-        }
+    suspend fun setUserId(login: String, password: String) {
+        viewModelScope.async{
+            currentUserID = getUserIdUseCase.execute(login,password)
+        }.await()
     }
 
-    fun insertUser(login : String, password : String, userId :Int) : Boolean{
+    suspend fun getAllUser() : List<User>{
+        return viewModelScope.async {
+            getAllUserUseCase.execute()
+        }.await()
+    }
+
+    suspend fun getUserById(userId : String) : User{
+        return viewModelScope.async {
+            getUserByIdUseCase.execute(userId)
+        }.await()
+    }
+
+    fun insertUser(login : String, password : String, userId :String) : Boolean{
         if(isLoginValid(login) && isPasswordValid(password)) {
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 insertUserUseCase.execute(User(userId, login, password))
+                currentUserID = userId
             }
             return true
         }
@@ -54,7 +72,7 @@ class UserViewModel(
         return false
     }
 
-    fun updatePassword(newPassword : String, id : Int) : Boolean{
+    fun updatePassword(newPassword : String, id: Int) : Boolean{
         if(isPasswordValid(newPassword)) {
             viewModelScope.launch {
                 updatePasswordUseCase.execute(newPassword, id)
@@ -83,7 +101,9 @@ class UserViewModelFactory(private val insertUserUseCase: InsertUserUseCase,
                            private val deleteUserUseCase: DeleteUserUseCase,
                            private val updateLoginUseCase: UpdateLoginUseCase,
                            private val updatePasswordUseCase: UpdatePasswordUseCase,
-                           private val getUserIdUseCase: GetUserIdUseCase
+                           private val getUserIdUseCase: GetUserIdUseCase,
+                           private val getUserByIdUseCase: GetUserByIdUseCase,
+                           private val getAllUserUseCase: GetAllUserUseCase
 ): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if(modelClass.isAssignableFrom(UserViewModel::class.java)){
@@ -91,7 +111,9 @@ class UserViewModelFactory(private val insertUserUseCase: InsertUserUseCase,
                                 deleteUserUseCase,
                                 updateLoginUseCase,
                                 updatePasswordUseCase,
-                                getUserIdUseCase) as T
+                                getUserIdUseCase,
+                                getUserByIdUseCase,
+                                getAllUserUseCase) as T
         }
         throw java.lang.IllegalArgumentException("Unknown ViewModel")
     }

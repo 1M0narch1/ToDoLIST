@@ -10,7 +10,7 @@ data class NoteModel (
     val text : String,
     val dateOfCreation : Long,
     val dateOfFutureExecution : Long,
-    val userId : Int,
+    val userId : String,
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0
 ){
@@ -18,7 +18,8 @@ data class NoteModel (
         text,
         dateOfCreation,
         dateOfFutureExecution,
-        userId
+        userId,
+        id
         )
 
     companion object{

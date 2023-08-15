@@ -12,5 +12,9 @@ interface UserRepository {
 
     fun updatePassword(newPassword : String, id : Int)
 
-    suspend fun getUserId(login : String, password : String) : Int
+    suspend fun getUserId(login : String, password : String) : String
+
+    suspend fun getUserByUserId(userId : String) : User
+
+    suspend fun getAllUser() : List<User>
 }

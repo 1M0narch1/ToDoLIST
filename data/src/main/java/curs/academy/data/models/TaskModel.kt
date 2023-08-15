@@ -12,7 +12,7 @@ data class TaskModel (
     val dateOfCreation : Long,
     val dateOfFutureExecution : Long,
     val taskCompleted : Boolean,
-    val userId : Int,
+    val userId : String,
     @PrimaryKey(autoGenerate = true)
     val id : Int = 0
 ){
@@ -22,7 +22,8 @@ data class TaskModel (
         dateOfCreation,
         dateOfFutureExecution,
         taskCompleted,
-        userId
+        userId,
+        id
     )
 
     companion object{

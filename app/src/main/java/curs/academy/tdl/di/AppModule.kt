@@ -1,28 +1,36 @@
 package curs.academy.tdl.di
 
 
-import curs.academy.domain.usecases.Note.DeleteAllNoteUseCase
-import curs.academy.domain.usecases.Note.DeleteNoteUseCase
-import curs.academy.domain.usecases.Task.DeleteTaskUseCase
-import curs.academy.domain.usecases.User.DeleteUserUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteFlowUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteUseCase
-import curs.academy.domain.usecases.Task.GetAllTaskUseCase
-import curs.academy.domain.usecases.Task.GetFlowAllTaskUseCase
-import curs.academy.domain.usecases.User.GetUserIdUseCase
-import curs.academy.domain.usecases.Note.InsertNoteUseCase
-import curs.academy.domain.usecases.Task.InsertTaskUseCase
-import curs.academy.domain.usecases.User.InsertUserUseCase
-import curs.academy.domain.usecases.User.UpdateLoginUseCase
-import curs.academy.domain.usecases.Note.UpdateNoteUseCase
-import curs.academy.domain.usecases.User.UpdatePasswordUseCase
-import curs.academy.domain.usecases.Task.UpdateStateCompletedTaskUseCase
-import curs.academy.domain.usecases.Task.UpdateTaskTextUseCase
+import curs.academy.domain.usecases.auth.LoginUserFUseCase
+import curs.academy.domain.usecases.auth.RegistrUserFUseCase
+import curs.academy.domain.usecases.note.DeleteAllNoteUseCase
+import curs.academy.domain.usecases.note.DeleteNoteUseCase
+import curs.academy.domain.usecases.note.GetAllNoteFlowUseCase
+import curs.academy.domain.usecases.note.GetAllNoteUseCase
+import curs.academy.domain.usecases.note.InsertNoteUseCase
+import curs.academy.domain.usecases.note.UpdateNoteUseCase
+import curs.academy.domain.usecases.task.DeleteTaskUseCase
+import curs.academy.domain.usecases.task.GetAllTaskUseCase
+import curs.academy.domain.usecases.task.GetFlowAllTaskUseCase
+import curs.academy.domain.usecases.task.InsertTaskUseCase
+import curs.academy.domain.usecases.task.UpdateStateCompletedTaskUseCase
+import curs.academy.domain.usecases.task.UpdateTaskTextUseCase
+import curs.academy.domain.usecases.user.DeleteUserUseCase
+import curs.academy.domain.usecases.user.GetAllUserUseCase
+import curs.academy.domain.usecases.user.GetUserByIdUseCase
+import curs.academy.domain.usecases.user.GetUserIdUseCase
+import curs.academy.domain.usecases.user.InsertUserUseCase
+import curs.academy.domain.usecases.user.UpdateLoginUseCase
+import curs.academy.domain.usecases.user.UpdatePasswordUseCase
+import curs.academy.tdl.viewmodel.AuthViewModelFactory
 import curs.academy.tdl.viewmodel.NoteViewModelFactory
 import curs.academy.tdl.viewmodel.TaskViewModelFactory
 import curs.academy.tdl.viewmodel.UserViewModelFactory
 import dagger.Module
 import dagger.Provides
+import javax.inject.Inject
+import javax.inject.Singleton
+
 
 @Module
 class AppModule {
@@ -60,17 +68,37 @@ class AppModule {
     }
     
     @Provides
-    fun provideUserViewModelFactory(insertUserUseCase: InsertUserUseCase,
-                                    deleteUserUseCase: DeleteUserUseCase,
-                                    updateLoginUseCase: UpdateLoginUseCase,
-                                    updatePasswordUseCase: UpdatePasswordUseCase,
-                                    getUserIdUseCase: GetUserIdUseCase
+    fun provideUserViewModelFactory(
+                                     insertUserUseCase: InsertUserUseCase,
+                                     deleteUserUseCase: DeleteUserUseCase,
+                                     updateLoginUseCase: UpdateLoginUseCase,
+                                     updatePasswordUseCase: UpdatePasswordUseCase,
+                                     getUserIdUseCase: GetUserIdUseCase,
+                                     getUserByIdUseCase: GetUserByIdUseCase,
+                                     getAllUserUseCase: GetAllUserUseCase
     ) : UserViewModelFactory{
         return UserViewModelFactory(insertUserUseCase,
                                     deleteUserUseCase,
                                     updateLoginUseCase,
                                     updatePasswordUseCase,
-                                    getUserIdUseCase)
+                                    getUserIdUseCase,
+                                    getUserByIdUseCase,
+                                    getAllUserUseCase)
     }
 
+    @Provides
+    fun provideAuthViewModelFactory(
+                                    loginUserFUseCase: LoginUserFUseCase,
+                                    registrUserFUseCase: RegistrUserFUseCase
+    ) : AuthViewModelFactory{
+        return AuthViewModelFactory(
+                                    loginUserFUseCase,
+                                    registrUserFUseCase
+        )
+    }
+
+    @Singleton
+    class CurrentUserSingleton @Inject constructor() {
+        var currentUserId: Int? = null
+    }
 }

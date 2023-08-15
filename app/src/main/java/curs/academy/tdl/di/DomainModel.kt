@@ -4,25 +4,27 @@ import curs.academy.domain.repository.AuthRepository
 import curs.academy.domain.repository.NoteRepository
 import curs.academy.domain.repository.TaskRepository
 import curs.academy.domain.repository.UserRepository
-import curs.academy.domain.usecases.Note.DeleteAllNoteUseCase
-import curs.academy.domain.usecases.Note.DeleteNoteUseCase
-import curs.academy.domain.usecases.Task.DeleteTaskUseCase
-import curs.academy.domain.usecases.User.DeleteUserUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteFlowUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteUseCase
-import curs.academy.domain.usecases.Task.GetAllTaskUseCase
-import curs.academy.domain.usecases.Task.GetFlowAllTaskUseCase
-import curs.academy.domain.usecases.User.GetUserIdUseCase
-import curs.academy.domain.usecases.Note.InsertNoteUseCase
-import curs.academy.domain.usecases.Task.InsertTaskUseCase
-import curs.academy.domain.usecases.User.InsertUserUseCase
-import curs.academy.domain.usecases.Auth.LoginUserFUseCase
-import curs.academy.domain.usecases.Auth.RegistrUserFUseCase
-import curs.academy.domain.usecases.User.UpdateLoginUseCase
-import curs.academy.domain.usecases.Note.UpdateNoteUseCase
-import curs.academy.domain.usecases.User.UpdatePasswordUseCase
-import curs.academy.domain.usecases.Task.UpdateStateCompletedTaskUseCase
-import curs.academy.domain.usecases.Task.UpdateTaskTextUseCase
+import curs.academy.domain.usecases.note.DeleteAllNoteUseCase
+import curs.academy.domain.usecases.note.DeleteNoteUseCase
+import curs.academy.domain.usecases.task.DeleteTaskUseCase
+import curs.academy.domain.usecases.user.DeleteUserUseCase
+import curs.academy.domain.usecases.note.GetAllNoteFlowUseCase
+import curs.academy.domain.usecases.note.GetAllNoteUseCase
+import curs.academy.domain.usecases.task.GetAllTaskUseCase
+import curs.academy.domain.usecases.task.GetFlowAllTaskUseCase
+import curs.academy.domain.usecases.user.GetUserIdUseCase
+import curs.academy.domain.usecases.note.InsertNoteUseCase
+import curs.academy.domain.usecases.task.InsertTaskUseCase
+import curs.academy.domain.usecases.user.InsertUserUseCase
+import curs.academy.domain.usecases.auth.LoginUserFUseCase
+import curs.academy.domain.usecases.auth.RegistrUserFUseCase
+import curs.academy.domain.usecases.user.UpdateLoginUseCase
+import curs.academy.domain.usecases.note.UpdateNoteUseCase
+import curs.academy.domain.usecases.user.UpdatePasswordUseCase
+import curs.academy.domain.usecases.task.UpdateStateCompletedTaskUseCase
+import curs.academy.domain.usecases.task.UpdateTaskTextUseCase
+import curs.academy.domain.usecases.user.GetAllUserUseCase
+import curs.academy.domain.usecases.user.GetUserByIdUseCase
 import dagger.Module
 import dagger.Provides
 
@@ -115,6 +117,16 @@ class DomainModel {
     @Provides
     fun provideGetUserIdUseCase(repository: UserRepository) : GetUserIdUseCase {
         return GetUserIdUseCase(repository)
+    }
+
+    @Provides
+    fun provideGetAllUserUseCase(repository: UserRepository) : GetAllUserUseCase {
+        return GetAllUserUseCase(repository)
+    }
+
+    @Provides
+    fun provideGetUserByIdUseCase(repository: UserRepository) : GetUserByIdUseCase {
+        return GetUserByIdUseCase(repository)
     }
 
     //auth

@@ -25,7 +25,7 @@ class TaskRepositoryImpl(private val taskDao: TaskDao) : TaskRepository {
         }
     }
 
-    override suspend fun getAllTask(userId : Int): List<Task> {
+    override suspend fun getAllTask(userId : String): List<Task> {
         return taskScope.async {
             taskDao.getAllTask(userId).map { it.toTask() }
         }.await()
@@ -49,7 +49,7 @@ class TaskRepositoryImpl(private val taskDao: TaskDao) : TaskRepository {
         }
     }
 
-    override fun getAllTaskFlow(userId : Int): Flow<List<Task>> {
+    override fun getAllTaskFlow(userId : String): Flow<List<Task>> {
         return taskDao.getAllTaskFlow(userId).flatMapConcat { list ->
             flowOf(list.map { it.toTask() })
         }

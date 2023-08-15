@@ -33,7 +33,7 @@ class DataModule {
     }
 
     @Provides
-    fun provideAuthRepository(userRepository: UserRepository) : AuthRepository {
-        return AuthRepositoryImpl(Firebase.auth, userRepository)
+    fun provideAuthRepository() : AuthRepository {
+        return AuthRepositoryImpl(Firebase.auth)
     }
 }

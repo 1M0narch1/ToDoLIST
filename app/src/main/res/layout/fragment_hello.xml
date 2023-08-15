@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.auth.HelloFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="20dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="20dp" />
+
+
+    <TextView
+    android:id="@+id/hello_text_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100dp"
+    android:text="@string/hello_text"
+    android:textColor="@color/black"
+    android:textSize="36sp"
+    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+    app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+    android:id="@+id/line_under_hello"
+    android:layout_width="0dp"
+    android:layout_height="2dp"
+    android:background="@color/yellow"
+    app:layout_constraintTop_toBottomOf="@id/hello_text_view"
+    app:layout_constraintStart_toStartOf="@id/hello_text_view"
+    app:layout_constraintEnd_toEndOf="@id/hello_text_view"/>
+
+    <View
+    android:id="@+id/rectangle_under_hello"
+    android:layout_width="0dp"
+    android:layout_height="70dp"
+    android:layout_marginTop="40dp"
+    android:background="@drawable/hello_frag_rectangle"
+    app:layout_constraintEnd_toEndOf="@id/guideline_end"
+    app:layout_constraintStart_toStartOf="@id/guideline_start"
+    app:layout_constraintTop_toBottomOf="@id/hello_text_view" />
+
+    <TextView
+    android:id="@+id/application_description_text_view"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:text="@string/application_description_text"
+    android:textColor="@color/black"
+    app:layout_constraintBottom_toBottomOf="@+id/rectangle_under_hello"
+    app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+    app:layout_constraintStart_toStartOf="@+id/guideline_start"
+    app:layout_constraintTop_toTopOf="@+id/rectangle_under_hello" />
+
+    <TextView
+        android:id="@+id/quick_start_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="@string/quick_start_text"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/rectangle_under_hello" />
+
+    <View
+        android:id="@+id/line_under_quick"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@color/yellow"
+        app:layout_constraintTop_toBottomOf="@id/quick_start_text_view"
+        app:layout_constraintStart_toStartOf="@id/quick_start_text_view"
+        app:layout_constraintEnd_toEndOf="@id/quick_start_text_view"/>
+
+    <View
+        android:id="@+id/rectangle_under_quick"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/hello_frag_rectangle"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_start"
+        app:layout_constraintTop_toBottomOf="@id/quick_start_text_view" />
+
+    <TextView
+        android:id="@+id/create_description_text_view"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="@string/create_description_text"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/rectangle_under_quick"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        app:layout_constraintTop_toTopOf="@+id/rectangle_under_quick" />
+
+    <Button
+        android:id="@+id/button"
+        android:theme="@style/Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="180dp"
+        android:text="@string/get_started_text"
+        android:textColor="@color/black"
+        android:backgroundTint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_start"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

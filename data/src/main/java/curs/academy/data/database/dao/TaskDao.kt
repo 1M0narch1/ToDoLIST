@@ -14,7 +14,7 @@ interface TaskDao {
     fun insertTask(task: TaskModel)
 
     @Query("SELECT * FROM task_table WHERE userId = :userId")
-    fun getAllTask(userId : Int) : List<TaskModel>
+    fun getAllTask(userId : String) : List<TaskModel>
 
     @Query("DELETE FROM task_table WHERE id = :id")
     fun deleteTask(id : Int)
@@ -26,5 +26,8 @@ interface TaskDao {
     fun updateStateCompletedTask(newStateTaskCompleted : Boolean, id : Int)
 
     @Query("SELECT * FROM task_table WHERE userId = :userId")
-    fun getAllTaskFlow(userId : Int) : Flow<List<TaskModel>>
+    fun getAllTaskFlow(userId : String) : Flow<List<TaskModel>>
+
+    @Query("DELETE FROM task_table WHERE userId = :userId")
+    fun deleteAllTask(userId : String)
 }

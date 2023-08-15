@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import curs.academy.domain.models.Note
-import curs.academy.domain.usecases.Note.DeleteAllNoteUseCase
-import curs.academy.domain.usecases.Note.DeleteNoteUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteFlowUseCase
-import curs.academy.domain.usecases.Note.GetAllNoteUseCase
-import curs.academy.domain.usecases.Note.InsertNoteUseCase
-import curs.academy.domain.usecases.Note.UpdateNoteUseCase
+import curs.academy.domain.usecases.note.DeleteAllNoteUseCase
+import curs.academy.domain.usecases.note.DeleteNoteUseCase
+import curs.academy.domain.usecases.note.GetAllNoteFlowUseCase
+import curs.academy.domain.usecases.note.GetAllNoteUseCase
+import curs.academy.domain.usecases.note.InsertNoteUseCase
+import curs.academy.domain.usecases.note.UpdateNoteUseCase
 import curs.academy.tdl.model.ValidationState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,13 +31,13 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
     private val  _state : MutableLiveData<ValidationState> = MutableLiveData(ValidationState.DataValid)
     val state : LiveData<ValidationState> = _state
 
-    fun getNotesFlow(currentUserId: Int) : StateFlow<List<Note>> = getAllNoteFlowUseCase.execute(currentUserId).stateIn(
+    fun getNotesFlow(currentUserId: String) : StateFlow<List<Note>> = getAllNoteFlowUseCase.execute(currentUserId).stateIn(
         scope = viewModelScope,
         started = SharingStarted.Eagerly,
         initialValue = listOf()
     )
 
-    fun insertNote(text : String, dateOfCreation : Long, dateOfFutureExecution : Long, currentUserId: Int):Boolean{
+    fun insertNote(text : String, dateOfCreation : Long, dateOfFutureExecution : Long, currentUserId: String):Boolean{
         if(isDataValid(text, dateOfCreation, dateOfFutureExecution)){
             viewModelScope.launch(Dispatchers.IO) {
                 insertNoteUseCase.execute(Note(text, dateOfCreation, dateOfFutureExecution, currentUserId))
@@ -57,7 +57,7 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
         return false
     }
 
-    suspend fun getAllNote(currentUserId: Int) : List<Note>{
+    suspend fun getAllNote(currentUserId: String) : List<Note>{
         return withContext(viewModelScope.coroutineContext + Dispatchers.IO) {
             getAllNoteUseCase.execute(currentUserId)
         }
@@ -69,7 +69,7 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
         }
     }
 
-    fun deleteAllNote(currentUserId: Int){
+    fun deleteAllNote(currentUserId: String){
         viewModelScope.launch(Dispatchers.IO) {
             deleteAllNoteUseCase.execute(currentUserId)
         }
@@ -84,7 +84,7 @@ class NoteViewModel(private val insertNoteUseCase : InsertNoteUseCase,
             Note(text,
                 dateOfCreation,
                 dateOfFutureExecution,
-                0)
+                "")
             _state.value = ValidationState.DataValid
              true
         }catch (e :Exception){

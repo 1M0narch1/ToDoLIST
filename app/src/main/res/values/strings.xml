@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">TDL</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_text">Hello</string>
+    <string name="application_description_text">This is an application for forming habits, making a schedule and plans for the future</string>
+    <string name="quick_start_text">Quick start</string>
+    <string name="create_description_text">Let\'s create an account and try to make a plan and create a habit</string>
+    <string name="get_started_text">Get Started</string>
+    <string name="password_text">Password</string>
+    <string name="go_in_text">Go In</string>
+    <string name="login_text">Login</string>
+    <string name="button_text_text">or do you want to create an account?</string>
+    <string name="registration_text">Registration</string>
+    <string name="select_your_account_text">Select your account</string>
+    <string name="add_new_account_text">Add new account</string>
+    <string name="profile_text">Profile</string>
+    <string name="tasks_text">Tasks</string>
+    <string name="notes_text">Notes</string>
+    <string name="add_note">add_note</string>
+    <string name="delete_note">delete_note</string>
+    <string name="leave_account_text">Leave account</string>
+    <string name="your_note_text">Your Note</string>
+    <string name="save_text">Save</string>
+    <string name="your_task_text">Your Task</string>
+    <string name="your_task_txt">Your Task</string>
 </resources>

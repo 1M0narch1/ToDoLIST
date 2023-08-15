@@ -24,7 +24,7 @@ class NoteRepositoryImpl(private val noteDao: NoteDao) : NoteRepository {
         }
     }
 
-    override suspend fun getAllNote(userId : Int): List<Note> {
+    override suspend fun getAllNote(userId : String): List<Note> {
         return noteScope.async {
             noteDao.getAllNote(userId).map { it.toNote() }
         }.await()
@@ -42,13 +42,13 @@ class NoteRepositoryImpl(private val noteDao: NoteDao) : NoteRepository {
         }
     }
 
-    override suspend fun deleteAllNote(userId : Int) {
+    override suspend fun deleteAllNote(userId : String) {
         noteScope.launch {
             noteDao.deleteAllNote(userId)
         }
     }
 
-    override fun getAllNoteFlow(userId : Int): Flow<List<Note>> {
+    override fun getAllNoteFlow(userId : String): Flow<List<Note>> {
         return noteDao.getAllNoteFlow(userId).flatMapConcat { list ->
             flowOf(list.map { it.toNote() })
         }

@@ -1,0 +1,12 @@
+package curs.academy.domain.usecases.task
+
+import curs.academy.domain.models.Task
+import curs.academy.domain.repository.TaskRepository
+
+class GetAllTaskUseCase(private val taskRepository: TaskRepository) {
+
+    suspend fun execute(userId : String) : List<Task>{
+        return taskRepository.getAllTask(userId)
+    }
+
+}

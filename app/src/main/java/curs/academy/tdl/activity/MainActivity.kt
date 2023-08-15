@@ -3,35 +3,49 @@ package curs.academy.tdl.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import curs.academy.domain.models.User
 import curs.academy.tdl.R
 import curs.academy.tdl.ToDoListApp
-import curs.academy.tdl.viewmodel.NoteViewModel
-import curs.academy.tdl.viewmodel.NoteViewModelFactory
-import curs.academy.tdl.viewmodel.TaskViewModel
-import curs.academy.tdl.viewmodel.TaskViewModelFactory
+import curs.academy.tdl.databinding.ActivityMainBinding
+import curs.academy.tdl.fragment.main.NoteFragment
+import curs.academy.tdl.fragment.main.ProfileFragment
+import curs.academy.tdl.fragment.main.TaskFragment
 import curs.academy.tdl.viewmodel.UserViewModel
 import curs.academy.tdl.viewmodel.UserViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var noteViewModelFactory: NoteViewModelFactory
-    @Inject
-    lateinit var taskViewModelFactory: TaskViewModelFactory
-    @Inject
-    lateinit var userViewModelFactory: UserViewModelFactory
+    private lateinit var binding : ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        ToDoListApp.INSTANCE.appComponent.inject(this)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val viewModelUser = ViewModelProvider(this, userViewModelFactory)
-            .get(UserViewModel::class.java)
-        val viewModelTask = ViewModelProvider(this, taskViewModelFactory)
-            .get(TaskViewModel::class.java)
-        val viewModelNote = ViewModelProvider(this, noteViewModelFactory)
-            .get(NoteViewModel::class.java)
+        val intetnt = intent
+        val listNum = intetnt.getStringExtra("userId")
+        supportFragmentManager.beginTransaction().replace(R.id.conteiner,
+            NoteFragment.newInstance(listNum!!)).commit()
+
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.note -> supportFragmentManager.beginTransaction().replace(R.id.conteiner,
+                    NoteFragment.newInstance(listNum)).commit()
+                R.id.task -> supportFragmentManager.beginTransaction().replace(R.id.conteiner,
+                    TaskFragment.newInstance(listNum)).commit()
+                R.id.profile -> supportFragmentManager.beginTransaction().replace(R.id.conteiner,
+                    ProfileFragment.newInstance(listNum)).commit()
+                else->{
+                }
+            }
+            true
+        }
+
+
     }
 
 }

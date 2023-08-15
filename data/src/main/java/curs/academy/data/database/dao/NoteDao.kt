@@ -13,7 +13,7 @@ interface NoteDao {
     fun insertNote(note: NoteModel)
 
     @Query("SELECT * FROM note_table WHERE userId = :userId")
-    fun getAllNote(userId : Int) : List<NoteModel>
+    fun getAllNote(userId : String) : List<NoteModel>
 
     @Query("DELETE FROM note_table WHERE id = :id")
     fun deleteNote(id : Int)
@@ -22,8 +22,8 @@ interface NoteDao {
     fun updateNote(newText : String, id : Int)
 
     @Query("DELETE FROM note_table WHERE userId = :userId")
-    fun deleteAllNote(userId : Int)
+    fun deleteAllNote(userId : String)
 
     @Query("SELECT * FROM note_table WHERE userId = :userId")
-    fun getAllNoteFlow(userId : Int) : Flow<List<NoteModel>>
+    fun getAllNoteFlow(userId : String) : Flow<List<NoteModel>>
 }

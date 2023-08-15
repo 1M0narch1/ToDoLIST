@@ -4,6 +4,6 @@ data class Note (
     val text : String,
     val dateOfCreation : Long,
     val dateOfFutureExecution : Long,
-    val userId : Int,
+    val userId : String,
     val id : Int = 0
 )

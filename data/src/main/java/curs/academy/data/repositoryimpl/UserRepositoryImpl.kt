@@ -10,13 +10,13 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class UserRepositoryImpl(val userDao: UserDao) : UserRepository {
+class UserRepositoryImpl(private val userDao: UserDao) : UserRepository {
 
     private val job = SupervisorJob()
     private val userScope = CoroutineScope(job + Dispatchers.IO)
 
     override fun insertUser(user: User) {
-        userScope.launch {
+        userScope.launch(Dispatchers.IO) {
             userDao.insertUser(UserModel.map(user = user))
         }
     }
@@ -39,9 +39,21 @@ class UserRepositoryImpl(val userDao: UserDao) : UserRepository {
         }
     }
 
-    override suspend fun getUserId(login: String, password: String): Int {
+    override suspend fun getUserId(login: String, password: String): String {
         return userScope.async {
            userDao.getUserId(login, password)
+        }.await()
+    }
+
+    override suspend fun getUserByUserId(userId: String): User {
+        return userScope.async {
+            userDao.getUserByUserId(userId).toUser()
+        }.await()
+    }
+
+    override suspend fun getAllUser(): List<User> {
+        return userScope.async {
+            userDao.getAllUser().map { it.toUser() }
         }.await()
     }
 }

@@ -8,13 +8,13 @@ interface NoteRepository {
 
     suspend fun insertNote(note: Note)
 
-    suspend fun getAllNote(userId : Int) : List<Note>
+    suspend fun getAllNote(userId : String) : List<Note>
 
     suspend fun deleteNote(id : Int)
 
     suspend fun updateNote(newText : String, id : Int)
 
-    suspend fun deleteAllNote(userId : Int)
+    suspend fun deleteAllNote(userId : String)
 
-    fun getAllNoteFlow(userId : Int) : Flow<List<Note>>
+    fun getAllNoteFlow(userId : String) : Flow<List<Note>>
 }

@@ -1,5 +1,6 @@
 package curs.academy.data.network.repositoryimpl
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import curs.academy.domain.models.AuthStatus
 import curs.academy.domain.models.User
@@ -14,11 +15,7 @@ import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl(
     private var auth: FirebaseAuth,
-    private val userRepository: UserRepository
     ):AuthRepository {
-
-    private val job = SupervisorJob()
-    private val authScope = CoroutineScope(job + Dispatchers.IO)
 
     override suspend fun login(userCreads: UserCreads) : AuthStatus {
         return try {
@@ -27,26 +24,21 @@ class AuthRepositoryImpl(
             val result = auth.signInWithEmailAndPassword(
                 userCreads.email,
                 userCreads.password
-            ).addOnCompleteListener {
+            ).addOnCompleteListener {task->
+                if(task.isSuccessful){
                 status = true
+                }
             }.addOnFailureListener{
                 message = "log in failure"
             }.addOnCanceledListener {
                     message = "log in canceled"
+            }.addOnSuccessListener {
+                status = true
             }.await()
-            authScope.launch {
-                userRepository.insertUser(
-                    User(
-                        result.user?.uid!!.toInt(),
-                        userCreads.email,
-                        userCreads.password
-                    )
-                )
-            }
-            AuthStatus(status, message, result.user?.uid!!.toInt())
+            AuthStatus(status, message, result.user?.uid ?: "lll")
         }
         catch (e:Exception){
-            AuthStatus(false,e.message ?: "an incomprehensible error",-1)
+            AuthStatus(false,e.message ?: "an incomprehensible error", "")
         }
     }
 
@@ -64,19 +56,10 @@ class AuthRepositoryImpl(
             }.addOnCanceledListener {
                 message = "registration canceled"
             }.await()
-            authScope.launch {
-                userRepository.insertUser(
-                    User(
-                        result.user?.uid!!.toInt(),
-                        userCreads.email,
-                        userCreads.password
-                    )
-                )
-            }
-            AuthStatus(status, message, result.user?.uid!!.toInt())
+            AuthStatus(status, message, result.user?.uid ?: "lll")
         }
         catch (e:Exception){
-            AuthStatus(false,e.message ?: "an incomprehensible error",-1)
+            AuthStatus(false,e.message ?: "an incomprehensible error","")
         }
     }
 
